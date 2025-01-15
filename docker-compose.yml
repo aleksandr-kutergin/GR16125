@@ -1,0 +1,32 @@
+services:
+  app:
+    build: .
+    container_name: app
+    ports:
+      - "8000:8000"
+    volumes:
+      - .:/app
+    depends_on:
+      - db
+        # condition: service_healthy
+    networks:
+      - app-network
+
+  db:
+    image: postgres
+    container_name: db
+    volumes:
+      - pg_data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+    networks:
+      - app-network
+
+networks:
+  app-network:
+    driver: bridge
+
+
+volumes:
+  pg_data:
+    driver: local
